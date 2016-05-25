@@ -80,19 +80,19 @@ router.put('/sampled/:userId/:beerId/:rate', (req, res) => {
                 var index = user.unsampled.indexOf(beerId);
                 user.unsampled.splice(index, 1);
                 user.save();
-            }else{
-                user.sampled.push(beerId);
-                user.save();
-                Beer.findById(beerId, (err, beer) => {
-                    if (err || !beer) return res.status(400).send(err || 'no beer found');
-                    beer.rate = rate;
-                    beer.comment = comment;
-                    if (beer.user.indexOf(userId) == -1) {
-                        beer.user.push(userId)
-                    }
-                    beer.save();
-                })
             }
+            user.sampled.push(beerId);
+            user.save();
+            Beer.findById(beerId, (err, beer) => {
+                if (err || !beer) return res.status(400).send(err || 'no beer found');
+                beer.rate = rate;
+                beer.comment = comment;
+                if (beer.user.indexOf(userId) == -1) {
+                    beer.user.push(userId)
+                }
+                beer.save();
+            })
+
             res.send(user);
         })
 });
@@ -108,7 +108,7 @@ router.put('/unsampled/:userId/:beerId', (req, res) => {
         if (hasBeerAsSampled || hasBeerAsUnsampled) {
             res.send(user);
         } else {
-            if(user.unsampled.indexOf(beerId)==-1){
+            if (user.unsampled.indexOf(beerId) == -1) {
                 user.unsampled.push(beerId);
             }
             user.save();

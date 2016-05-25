@@ -10,7 +10,7 @@
         <form ng-submit="sampled(beer._id)">
             <div class="form-group">
                 <h4>Your rating (bad 1~10 good)</h4>
-                <input class="form-control" type="number" ng-model="rate">
+                <input class="form-control" max="10" type="number" ng-model="rate">
                 <!-- <select class="form-control" ng-model="rate" required>
                     <option value="1">really bad</option>
                     <option value="2">bad</option>
@@ -24,7 +24,7 @@
                 <label for="comment">Comment:</label>
                 <textarea class="form-control" rows="5" ng-model="comment"></textarea>
             </div>
-            <button type="submit" class="btn btn-success">Update</button>
+            <button type="submit" class="btn btn-success" ng-click="goHome()">Update</button>
         </form>
     </div>
 </div>

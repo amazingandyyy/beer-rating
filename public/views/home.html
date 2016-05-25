@@ -32,7 +32,7 @@
                 <div class="list-group">
                     <h3 class="list-group-item-heading"><i class="fa fa-square-o"></i> Wishlist:</h3>
                     <span ng-show="unsampled.length==0">
-                        <h5>No beer rated</h5>
+                        <h5>No beer in wishlist</h5>
                     </span>
                     <span ng-hide="unsampled.length==0" ui-sref="item({id: item._id})" class="list-group-item pointer" ng-repeat="item in unsampled">
                         <h5 class="list-group-item-text">{{item.beerInfo.name}}</h5>
@@ -43,10 +43,12 @@
                 <div class="list-group">
                     <h3 class="list-group-item-heading"><i class="fa fa-square-o"></i> History:</h3>
                     <span ng-show="allbeer.length==0">
-                        <h5>Haven't brows anything.</h5>
+                        <h5>Haven't browse anything.</h5>
                     </span>
                     <span ng-hide="allbeer.length==0" ui-sref="item({id: item._id})" class="list-group-item pointer" ng-repeat="item in allbeer">
-                        <h5 class="list-group-item-text">{{item.beerInfo.name}}</h5>
+                        <h5 class="list-group-item-text">{{item.beerInfo.name}}
+                        <span ng-if="item.rate" class="pull-right"><i class="fa fa-star" aria-hidden="true"></i> {{item.rate}}</span>
+                    </h5>
                     </span>
                 </div>
             </div>

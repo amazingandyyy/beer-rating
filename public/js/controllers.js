@@ -115,10 +115,9 @@ app.controller('profileSettingCtrl', function($http, $scope, Auth, User) {
 app.controller('wallCtrl', function($http, $scope, Auth, Beer) {
     console.log('wallCtrl loaded');
 
+    function randomOne() {
+        $scope.beer = null;
 
-    $scope.getRandomBeer = () => {
-
-        // console.log('$scope.currentUser: ', );
         Beer.getRandomBeer($scope.currentUser._id).then(function(res) {
             console.log('res: ', res.data);
             $scope.beer = res.data;
@@ -130,6 +129,9 @@ app.controller('wallCtrl', function($http, $scope, Auth, Beer) {
             console.log('Cannot get one beer!');
         })
     }
+    $scope.getRandomBeer = () => {
+        randomOne();
+    }
     $scope.sampled = (beerId) => {
         var userId = $scope.currentUser._id;
         var rate = $scope.rate;
@@ -137,6 +139,7 @@ app.controller('wallCtrl', function($http, $scope, Auth, Beer) {
         console.log(rate, comment);
         Beer.sampled(userId, beerId, rate, comment).then(function(res) {
             console.log('res: ', res.data);
+            randomOne();
             // $scope.beer = res.data;
             // $scope.beer.name = res.data.beerInfo.name;
             // $scope.beer.description = res.data.beerInfo.style.description;
@@ -149,6 +152,7 @@ app.controller('wallCtrl', function($http, $scope, Auth, Beer) {
         console.log(userId, ' unsampled ', beerId);
         Beer.unsampled(userId, beerId).then(function(res) {
             console.log('res: ', res.data);
+            randomOne();
             // $scope.beer = res.data;
             // $scope.beer.name = res.data.beerInfo.name;
             // $scope.beer.description = res.data.beerInfo.style.description;
@@ -163,19 +167,19 @@ app.controller('wallCtrl', function($http, $scope, Auth, Beer) {
 
 });
 
-app.controller('itemCtrl', function($http, $scope, $stateParams, User, Beer) {
+app.controller('itemCtrl', function($http, $scope, $stateParams, User, Beer, $state, $timeout) {
     console.log('itemCtrl loaded');
     console.log($stateParams);
     console.log($stateParams.id);
     Beer.getOne($stateParams.id).then(function(res) {
-        console.log(res);
+        console.log(res.data);
         $scope.beer = res.data;
         $scope.beer.name = res.data.beerInfo.name;
         $scope.beer.description = res.data.beerInfo.style.description;
         $scope.rate = res.data.rate;
         $scope.comment = res.data.comment;
     }, function(err) {
-        console.log('user is not logged in.');
+        console.log('beer is not found.');
     })
 
     $scope.sampled = (beerId) => {
@@ -192,4 +196,9 @@ app.controller('itemCtrl', function($http, $scope, $stateParams, User, Beer) {
             console.log('Cannot get one beer!');
         })
     };
+    $scope.goHome = () => {
+        $timeout(function(){
+            $state.go('home')
+        },400)
+    }
 });
