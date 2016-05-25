@@ -1,25 +1,57 @@
 var express = require('express');
 var router = express.Router();
 
+var request = require('request');
 var Beer = require('../models/beer');
 var User = require('../models/user');
 var moment = require('moment');
 
-router.get('/:id', (req, res) => {
-    var id = req.params.id;
-    beer.findById(id, (err, beer) => {
-        res.status(err ? 400 : 200).send(err || beer);
-    }).populate('highiestUser');
+router.get('/', (req, res) => {
+    Beer.find({}, (err, beers) => {
+        res.status(err ? 400 : 200).send(err || beers)
+    })
 });
-router.get('/randomone', (req, res) => {
-    console.log('req one beer: ');
-
-
-
-    Beer.findById(id, (err, beer) => {
-        res.status(err ? 400 : 200).send(err || beer);
-    }).populate('highiestUser');
+router.delete('/:id', (req, res) => {
+    console.log('delete beerId: ', beerId);
+    var beerId = req.params.id;
+    Beer.findByIdAndRemove(beerId, (err) => {
+        res.status(err ? 400 : 200).send(err)
+    })
 });
+router.get('/randomone/:userId', (req, res) => {
+    console.log('req one beer');
+    var userId = req.params.userId;
+
+
+    request(`http://api.brewerydb.com/v2/beer/random/?key=${process.env.BRW_KEY}`, (err, res) => {
+        if (err) return res.status(400).send(err);
+        console.log('data: ', JSON.parse(res.body).data);
+        var beerData = JSON.parse(res.body).data;
+        var beerObj = {
+            beerInfo: beerData
+        }
+        console.log('userId: ', req.params.userId);
+        Beer.create(beerObj, (err, beer) => {
+            if (err) return res.send(err);
+            console.log('cannot create');
+            console.log('beer: ', beer);
+
+            beer.user.push(userId);
+            beer.save();
+            console.log('beer._id: ', beer._id);
+            if(beer._id){
+                User.findById(userId, (err, user) => {
+                    if (err || !user) return res.status(400).send(err || 'no user found');
+                    console.log('user: ', user);
+                    user.allbeer.push(beer._id);
+                    user.save();
+                    res.send(beer);
+                })
+            }
+        });
+    })
+});
+
 router.put('/bit', User.isLoggedIn, (req, res) => {
     // console.log('bitInfo: ', req.body);
     var userId = req.body.userId;
@@ -34,7 +66,7 @@ router.put('/bit', User.isLoggedIn, (req, res) => {
         if (valueOkay && whoIsBitter) {
             beer.price = Number(bitVlue);
             beer.highiestUser.unshift(userId);
-            beer.save(err=>{
+            beer.save(err => {
                 if (err) return es.send(err);
                 res.send(beer);
             });

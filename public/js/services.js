@@ -1,7 +1,6 @@
 'use strict';
 
 var app = angular.module('myApp');
-// var BRW_KEY = process.env.BRW_KEY
 
 
 app.service('Auth', function($http) {
@@ -57,10 +56,10 @@ app.service('User', function($http) {
 });
 
 app.service('Beer', function($http) {
-    this.getRandomBeer = () => {
+    this.getRandomBeer = (userId) => {
         return $http({
             method: 'GET',
-            url: `http://api.brewerydb.com/v2/beer/random/?key=${BRW_KEY}`
+            url: `/api/beer/randomone/${userId}`
         });
     }
 });

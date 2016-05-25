@@ -103,7 +103,8 @@ app.controller('wallCtrl', function($http, $scope, Auth, Beer) {
 
 
     $scope.getRandomBeer = () => {
-        Beer.getRandomBeer().then(function(res) {
+        // console.log('$scope.currentUser: ', );
+        Beer.getRandomBeer($scope.currentUser._id).then(function(res) {
             console.log('res: ', res.data);
             $scope.beer = res.data;
         }, function(err) {

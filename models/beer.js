@@ -4,11 +4,11 @@ var mongoose = require('mongoose');
 var jwt = require('jsonwebtoken');
 
 var beerSchema = new mongoose.Schema({
-    name: {
-        type: String
+    beerInfo: {
+
     },
-    description: {
-        type: String
+    rate: {
+        type : Number
     },
     user:[{
         type: mongoose.Schema.Types.ObjectId,
