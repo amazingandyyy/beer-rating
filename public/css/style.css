@@ -10,6 +10,9 @@ a {
     transform: scale(1.02);
     transition: .1s all ease-in-out;
 }*/
+.pointer {
+    cursor: pointer;
+}
 .list-group-item-text {
     margin: 0px;
 }

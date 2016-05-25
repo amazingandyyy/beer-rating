@@ -86,8 +86,7 @@ router.get('/profile/:id', (req, res) => {
     var userId = req.params.id;
     console.log(userId);
     User.findById(userId)
-        .populate('sampled')
-        .populate('unsampled')
+        .populate('sampled unsampled allbeer')
         .exec((err, user) => {
             res.status(err ? 400 : 200).send(err || user);
         });

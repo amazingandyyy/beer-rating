@@ -77,4 +77,10 @@ app.service('Beer', function($http) {
             url: `/api/beer/unsampled/${userId}/${beerId}`
         });
     }
+    this.getOne = (id) => {
+        return $http({
+            method: 'GET',
+            url: `/api/beer/${id}`
+        });
+    }
 });
