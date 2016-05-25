@@ -10,6 +10,9 @@ var beerSchema = new mongoose.Schema({
     rate: {
         type : Number
     },
+    comment: {
+        type: String
+    },
     user:[{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'

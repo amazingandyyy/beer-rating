@@ -11,6 +11,12 @@ router.get('/', (req, res) => {
         res.status(err ? 400 : 200).send(err || beers)
     })
 });
+router.get('/:id', (req, res) => {
+    var beerId = req.params.id;
+    Beer.findById(beerId, (err, beer) => {
+        res.status(err ? 400 : 200).send(err || beer)
+    })
+});
 router.delete('/', (req, res) => {
     Beer.remove({}, (err) => {
         res.status(err ? 400 : 200).send(err)
@@ -55,21 +61,40 @@ router.get('/randomone/:userId', (req, res) => {
         });
     })
 });
-router.put('/sampled/:userId/:beerId', (req, res) => {
+router.put('/sampled/:userId/:beerId/:rate', (req, res) => {
     // console.log('req one beer');
     var userId = req.params.userId;
     var beerId = req.params.beerId;
+    var rate = req.params.rate;
+    var comment = req.body.comment;
+    // console.log('userId: ', userId);
+    // console.log('beerId: ', beerId);
+    console.log('comment: ', comment);
     console.log('userId: ', userId);
-    console.log('beerId: ', beerId);
 
-    User.findById(userId, (err, user) => {
-        if (err || !user) return res.status(400).send(err || 'no user found');
-        user.unsampled = []
-        user.sampled = [];
-        user.sampled.push(beerId);
-        user.save();
-        res.send(user);
-    })
+    User.findById(userId)
+        .exec((err, user) => {
+            if (err || !user) return res.status(400).send(err || 'no user found');
+            if (user.unsampled.indexOf(`${beerId}`) !== -1) {
+                console.log('it was in unsampled before');
+                var index = user.unsampled.indexOf(beerId);
+                user.unsampled.splice(index, 1);
+                user.save();
+            }else{
+                user.sampled.push(beerId);
+                user.save();
+                Beer.findById(beerId, (err, beer) => {
+                    if (err || !beer) return res.status(400).send(err || 'no beer found');
+                    beer.rate = rate;
+                    beer.comment = comment;
+                    if (beer.user.indexOf(userId) == -1) {
+                        beer.user.push(userId)
+                    }
+                    beer.save();
+                })
+            }
+            res.send(user);
+        })
 });
 router.put('/unsampled/:userId/:beerId', (req, res) => {
     // console.log('req one beer');
@@ -78,13 +103,20 @@ router.put('/unsampled/:userId/:beerId', (req, res) => {
 
     User.findById(userId, (err, user) => {
         if (err || !user) return res.status(400).send(err || 'no user found');
-        user.sampled = [];
-        user.unsampled = [];
-        user.unsampled.push(beerId);
-        user.save();
+        var hasBeerAsSampled = user.sampled.indexOf(beerId) !== -1;
+        var hasBeerAsUnsampled = user.sampled.indexOf(beerId) !== -1;
+        if (hasBeerAsSampled || hasBeerAsUnsampled) {
+            res.send(user);
+        } else {
+            if(user.unsampled.indexOf(beerId)==-1){
+                user.unsampled.push(beerId);
+            }
+            user.save();
+        }
         res.send(user);
     })
 });
+
 
 router.put('/bit', User.isLoggedIn, (req, res) => {
     // console.log('bitInfo: ', req.body);

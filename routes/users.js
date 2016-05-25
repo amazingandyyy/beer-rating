@@ -8,7 +8,7 @@ var moment = require('moment');
 router.get('/', (req, res) => {
     User.find({}, (err, users) => {
         res.status(err ? 400 : 200).send(err || users);
-    });
+    }).populate('sampled unsampled');
 });
 router.get('/beers', (req, res) => {
     beer.find({}, (err, beers) => {

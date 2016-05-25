@@ -62,10 +62,13 @@ app.service('Beer', function($http) {
             url: `/api/beer/randomone/${userId}`
         });
     }
-    this.sampled = (userId, beerId) => {
+    this.sampled = (userId, beerId, rate, comment) => {
         return $http({
             method: 'PUT',
-            url: `/api/beer/sampled/${userId}/${beerId}`
+            url: `/api/beer/sampled/${userId}/${beerId}/${rate}`,
+            data: {
+                comment: comment
+            }
         });
     }
     this.unsampled = (userId, beerId) => {

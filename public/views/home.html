@@ -21,22 +21,21 @@
                     <span ng-show="sampled.length==0">
                         <h5>No beer rated</h5>
                     </span>
-                    <span ng-hide="sampled.length==0" class="list-group-item" ng-repeat="item in sampled">
-                        <h5 class="list-group-item-text">item.beerInfo.name</h5>
+                    <span ng-hide="sampled.length==0" ui-sref="item" class="list-group-item" ng-repeat="item in sampled">
+                        <h5 class="list-group-item-text">{{item.beerInfo.name}}
+                        <span class="pull-right"><i class="fa fa-star" aria-hidden="true"></i> {{item.rate}}</span>
+                    </h5>
                     </span>
                 </div>
             </div>
             <div class="col-sm-6">
                 <div class="list-group">
-
-
                     <h3 class="list-group-item-heading"><i class="fa fa-square-o"></i> Wishlist:</h3>
                     <span ng-show="unsampled.length==0">
                         <h5>No beer rated</h5>
                     </span>
-                    <span ng-hide="unsampled.length==0" href="#" ng-repeat="item in unsampled">
-                        <h5 class="list-group-item-text">- {{item.beerInfo.name}}</h5>
-
+                    <span ng-hide="unsampled.length==0" class="list-group-item" ng-repeat="item in unsampled">
+                        <h5 class="list-group-item-text">{{item.beerInfo.name}}</h5>
                     </span>
                 </div>
             </div>

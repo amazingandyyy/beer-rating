@@ -33,7 +33,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
             controller: 'wallCtrl'
         })
         .state('item', {
-            url: '/item:id',
+            url: '/item/:id',
             templateUrl: '../views/item.html',
             controller: 'itemCtrl'
         })

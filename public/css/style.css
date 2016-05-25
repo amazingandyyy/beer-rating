@@ -10,7 +10,9 @@ a {
     transform: scale(1.02);
     transition: .1s all ease-in-out;
 }*/
-
+.list-group-item-text {
+    margin: 0px;
+}
 .navbar.navbar-default {
 border-radius: 0px;
 }

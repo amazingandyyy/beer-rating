@@ -95,7 +95,7 @@ app.controller('profileSettingCtrl', function($http, $scope, Auth, User) {
     console.log('profileCtrl loaded');
     console.log($scope.currentUser);
     Auth.getProfile().then(function(res) {
-        console.log(res);
+        console.log('currentUser:' , res);
         $scope.currentUser = res.data;
         $scope.settingProfile = angular.copy($scope.currentUser);
     }, function(err) {
@@ -134,26 +134,26 @@ app.controller('wallCtrl', function($http, $scope, Auth, Beer) {
         var rate = $scope.rate;
         var comment = $scope.comment;
         console.log(rate,comment);
-        // Beer.sampled(userId, beerId).then(function(res) {
-        //     console.log('res: ', res.data);
-        //     // $scope.beer = res.data;
-        //     // $scope.beer.name = res.data.beerInfo.name;
-        //     // $scope.beer.description = res.data.beerInfo.style.description;
-        // }, function(err) {
-        //     console.log('Cannot get one beer!');
-        // })
+        Beer.sampled(userId, beerId, rate, comment).then(function(res) {
+            console.log('res: ', res.data);
+            // $scope.beer = res.data;
+            // $scope.beer.name = res.data.beerInfo.name;
+            // $scope.beer.description = res.data.beerInfo.style.description;
+        }, function(err) {
+            console.log('Cannot get one beer!');
+        })
     }
     $scope.unsampled = (beerId) => {
         var userId = $scope.currentUser._id
         console.log(userId, ' unsampled ', beerId);
-        // Beer.unsampled(userId, beerId).then(function(res) {
-        //     console.log('res: ', res.data);
-        //     $scope.beer = res.data;
-        //     $scope.beer.name = res.data.beerInfo.name;
-        //     $scope.beer.description = res.data.beerInfo.style.description;
-        // }, function(err) {
-        //     console.log('Cannot get one beer!');
-        // })
+        Beer.unsampled(userId, beerId).then(function(res) {
+            console.log('res: ', res.data);
+            // $scope.beer = res.data;
+            // $scope.beer.name = res.data.beerInfo.name;
+            // $scope.beer.description = res.data.beerInfo.style.description;
+        }, function(err) {
+            console.log('Cannot get one beer!');
+        })
     }
 
 
@@ -162,29 +162,14 @@ app.controller('wallCtrl', function($http, $scope, Auth, Beer) {
 
 });
 
-// app.controller('itemCtrl', function($http, $scope, $stateParams, User, Post) {
-//     console.log('itemCtrl loaded');
-//     console.log($stateParams);
-//     console.log($stateParams.id);
-//     Post.getOne($stateParams.id).then(function(res) {
-//         console.log(res);
-//         $scope.post = res.data;
-//     }, function(err) {
-//         console.log('user is not logged in.');
-//     })
-//     $scope.bitForm = (id) => {
-//         var userId = $scope.currentUser._id;
-//         var bitVlue = Number($scope.post.price) + Number($scope.addValue);
-//         var itemId = id;
-//         Post.bitted(userId, bitVlue, itemId).then(function(res) {
-//             console.log(res);
-//             $scope.post.price = res.data.price;
-//             $scope.addValue = null;
-//         }, function(err) {
-//             console.log('user is not logged in.');
-//         })
-//     }
-//     $scope.timeLeft = () => {
-//
-//     }
-// });
+app.controller('itemCtrl', function($http, $scope, $stateParams, User, Beer) {
+    console.log('itemCtrl loaded');
+    console.log($stateParams);
+    console.log($stateParams.id);
+    // Beer.getOne($stateParams.id).then(function(res) {
+    //     console.log(res);
+    //     $scope.beer = res.data;
+    // }, function(err) {
+    //     console.log('user is not logged in.');
+    // })
+});
