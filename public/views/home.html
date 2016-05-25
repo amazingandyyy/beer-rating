@@ -3,7 +3,7 @@
     {{currentUser}} -->
     <div class="jumbotron" ng-show="currentUser">
         <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-12">
                 <h2>Hi! {{currentUser.name}}</h2>
                 <h5>You are logged in as {{currentUser.username}}</h5>
                 <br>
@@ -11,23 +11,31 @@
                 <button ui-sref="wall" type="button" class="btn btn-default">Explore beer</button>
                 <br>
                 <br>
-                <button ui-sref="profileSetting" type="button" class="btn btn-primary">Update my profile</button>
+                <hr>
+                <!-- <button ui-sref="profileSetting" type="button" class="btn btn-primary">Update my profile</button> -->
             </div>
-            <br>
+
             <div class="col-sm-6">
                 <div class="list-group">
-                    <h3 class="list-group-item-heading"><i class="fa fa-check-square-o"></i> Sampled:</h3>
-                    <span href="#" class="list-group-item">
-                        <h5 class="list-group-item-text">list itme</h5>
-
+                    <h3 class="list-group-item-heading"><i class="fa fa-check-square-o"></i> Rated:</h3>
+                    <span ng-show="sampled.length==0">
+                        <h5>No beer rated</h5>
+                    </span>
+                    <span ng-hide="sampled.length==0" class="list-group-item" ng-repeat="item in sampled">
+                        <h5 class="list-group-item-text">item.beerInfo.name</h5>
                     </span>
                 </div>
             </div>
             <div class="col-sm-6">
                 <div class="list-group">
-                    <h3 class="list-group-item-heading"><i class="fa fa-square-o"></i> Not Sampled:</h3>
-                    <span href="#" class="list-group-item">
-                        <h5 class="list-group-item-text">list item</h5>
+
+
+                    <h3 class="list-group-item-heading"><i class="fa fa-square-o"></i> Wishlist:</h3>
+                    <span ng-show="unsampled.length==0">
+                        <h5>No beer rated</h5>
+                    </span>
+                    <span ng-hide="unsampled.length==0" href="#" ng-repeat="item in unsampled">
+                        <h5 class="list-group-item-text">- {{item.beerInfo.name}}</h5>
 
                     </span>
                 </div>

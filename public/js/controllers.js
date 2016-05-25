@@ -49,16 +49,29 @@ app.controller('mainCtrl', function($http, $scope, Auth, $state) {
             })
     }
 });
-app.controller('homeCtrl', function($http, $scope, Auth) {
+app.controller('homeCtrl', function($http, $scope, Auth, User) {
     console.log('homeCtrl loaded');
     // $scope.logMsg.err = '';
 
     Auth.getProfile().then(function(res) {
         console.log(res);
         $scope.currentUser = res.data;
+
+        User.getProfileById(res.data._id).then(res=>{
+            console.log('res.data: ', res.data);
+            $scope.sampled = res.data.sampled;
+            $scope.unsampled = res.data.unsampled;
+        })
+
+        //
+        // console.log('currentId: ', res.data);
+
+
     }, function(err) {
         console.log('user is not logged in.');
     });
+
+
 });
 app.controller('communityCtrl', function($http, $scope, Auth) {
     console.log('communityCtrl loaded');
@@ -103,32 +116,37 @@ app.controller('wallCtrl', function($http, $scope, Auth, Beer) {
 
 
     $scope.getRandomBeer = () => {
+
         // console.log('$scope.currentUser: ', );
         Beer.getRandomBeer($scope.currentUser._id).then(function(res) {
             console.log('res: ', res.data);
             $scope.beer = res.data;
             $scope.beer.name = res.data.beerInfo.name;
             $scope.beer.description = res.data.beerInfo.style.description;
+            $scope.showratingForm = false;
+            $scope.showAddWishList = false;
         }, function(err) {
             console.log('Cannot get one beer!');
         })
     }
     $scope.sampled = (beerId) => {
-        var userId = $scope.currentUser._id
-        console.log(userId, ' sampled ', beerId);
-        Beer.sampled(userId, beerId).then(function(res) {
-            // console.log('res: ', res.data);
-            // $scope.beer = res.data;
-            // $scope.beer.name = res.data.beerInfo.name;
-            // $scope.beer.description = res.data.beerInfo.style.description;
-        }, function(err) {
-            console.log('Cannot get one beer!');
-        })
+        var userId = $scope.currentUser._id;
+        var rate = $scope.rate;
+        var comment = $scope.comment;
+        console.log(rate,comment);
+        // Beer.sampled(userId, beerId).then(function(res) {
+        //     console.log('res: ', res.data);
+        //     // $scope.beer = res.data;
+        //     // $scope.beer.name = res.data.beerInfo.name;
+        //     // $scope.beer.description = res.data.beerInfo.style.description;
+        // }, function(err) {
+        //     console.log('Cannot get one beer!');
+        // })
     }
     $scope.unsampled = (beerId) => {
         var userId = $scope.currentUser._id
         console.log(userId, ' unsampled ', beerId);
-        // Beer.getRandomBeer().then(function(res) {
+        // Beer.unsampled(userId, beerId).then(function(res) {
         //     console.log('res: ', res.data);
         //     $scope.beer = res.data;
         //     $scope.beer.name = res.data.beerInfo.name;

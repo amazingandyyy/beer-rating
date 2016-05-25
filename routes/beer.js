@@ -11,6 +11,11 @@ router.get('/', (req, res) => {
         res.status(err ? 400 : 200).send(err || beers)
     })
 });
+router.delete('/', (req, res) => {
+    Beer.remove({}, (err) => {
+        res.status(err ? 400 : 200).send(err)
+    })
+});
 router.delete('/:id', (req, res) => {
     console.log('delete beerId: ', beerId);
     var beerId = req.params.id;
@@ -28,9 +33,9 @@ router.get('/randomone/:userId', (req, res) => {
         // console.log('data: ', JSON.parse(res.body).data);
         var beerData = JSON.parse(response.body).data;
         var beerObj = {
-            beerInfo: beerData
-        }
-        // console.log('userId: ', req.params.userId);
+                beerInfo: beerData
+            }
+            // console.log('userId: ', req.params.userId);
         Beer.create(beerObj, (err, beer) => {
             if (err) return res.send(err);
             // console.log('beer: ', beer);
@@ -38,7 +43,7 @@ router.get('/randomone/:userId', (req, res) => {
             beer.user.push(userId);
             beer.save();
             // console.log('beer._id: ', beer._id);
-            if(beer._id){
+            if (beer._id) {
                 User.findById(userId, (err, user) => {
                     if (err || !user) return res.status(400).send(err || 'no user found');
                     // console.log('user: ', user);
@@ -48,6 +53,36 @@ router.get('/randomone/:userId', (req, res) => {
                 })
             }
         });
+    })
+});
+router.put('/sampled/:userId/:beerId', (req, res) => {
+    // console.log('req one beer');
+    var userId = req.params.userId;
+    var beerId = req.params.beerId;
+    console.log('userId: ', userId);
+    console.log('beerId: ', beerId);
+
+    User.findById(userId, (err, user) => {
+        if (err || !user) return res.status(400).send(err || 'no user found');
+        user.unsampled = []
+        user.sampled = [];
+        user.sampled.push(beerId);
+        user.save();
+        res.send(user);
+    })
+});
+router.put('/unsampled/:userId/:beerId', (req, res) => {
+    // console.log('req one beer');
+    var userId = req.params.userId;
+    var beerId = req.params.beerId;
+
+    User.findById(userId, (err, user) => {
+        if (err || !user) return res.status(400).send(err || 'no user found');
+        user.sampled = [];
+        user.unsampled = [];
+        user.unsampled.push(beerId);
+        user.save();
+        res.send(user);
     })
 });
 
