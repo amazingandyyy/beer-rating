@@ -24,18 +24,19 @@
 </div> -->
 <!-- <h4>{{(users | filter: searchFilter).length}} users found</h4> -->
 <div class="colr-sm-12 text-center">
-    <button type="button" class="btn btn-primary btn-lg" ng-click="getRandomBeer()">Pick One</button>
+    <button type="button" class="btn btn-primary btn-xs" ng-click="getRandomBeer()">Pick One</button>
 </div>
-<div class="colr-sm-3"></div>
-<div ng-show="beer" class="col-sm-6 col-md-3">
-    <div class="card" style="cursor: pointer;">
+<div class="col-sm-2"></div>
+<div ng-show="beer" class="col-sm-8">
+    <hr>
+    <div class="card">
         <div class="card-block">
             <h3>{{beer.name}}</h3>
             <p >{{beer.description}}</p>
-            <a ng-click="rate = true" class="btn btn-success">Sampled</a>
+            <a ng-click="sampled(beer._id)" class="btn btn-success">Sampled</a>
             <input ng-show="rate" type="text">
-            <a ng-hide="rate"class="btn btn-default">Not Sampled</a>
+            <a ng-click="unsampled(beer._id)" ng-hide="rate"class="btn btn-default">Not Sampled</a>
         </div>
     </div>
 </div>
-<div class="colr-sm-3"></div>
+<div class="col-sm-2"></div>

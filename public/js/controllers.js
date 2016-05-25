@@ -107,9 +107,35 @@ app.controller('wallCtrl', function($http, $scope, Auth, Beer) {
         Beer.getRandomBeer($scope.currentUser._id).then(function(res) {
             console.log('res: ', res.data);
             $scope.beer = res.data;
+            $scope.beer.name = res.data.beerInfo.name;
+            $scope.beer.description = res.data.beerInfo.style.description;
         }, function(err) {
             console.log('Cannot get one beer!');
         })
+    }
+    $scope.sampled = (beerId) => {
+        var userId = $scope.currentUser._id
+        console.log(userId, ' sampled ', beerId);
+        Beer.sampled(userId, beerId).then(function(res) {
+            // console.log('res: ', res.data);
+            // $scope.beer = res.data;
+            // $scope.beer.name = res.data.beerInfo.name;
+            // $scope.beer.description = res.data.beerInfo.style.description;
+        }, function(err) {
+            console.log('Cannot get one beer!');
+        })
+    }
+    $scope.unsampled = (beerId) => {
+        var userId = $scope.currentUser._id
+        console.log(userId, ' unsampled ', beerId);
+        // Beer.getRandomBeer().then(function(res) {
+        //     console.log('res: ', res.data);
+        //     $scope.beer = res.data;
+        //     $scope.beer.name = res.data.beerInfo.name;
+        //     $scope.beer.description = res.data.beerInfo.style.description;
+        // }, function(err) {
+        //     console.log('Cannot get one beer!');
+        // })
     }
 
 

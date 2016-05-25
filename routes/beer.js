@@ -19,30 +19,29 @@ router.delete('/:id', (req, res) => {
     })
 });
 router.get('/randomone/:userId', (req, res) => {
-    console.log('req one beer');
+    // console.log('req one beer');
     var userId = req.params.userId;
 
 
-    request(`http://api.brewerydb.com/v2/beer/random/?key=${process.env.BRW_KEY}`, (err, res) => {
+    request(`http://api.brewerydb.com/v2/beer/random/?key=${process.env.BRW_KEY}`, (err, response) => {
         if (err) return res.status(400).send(err);
-        console.log('data: ', JSON.parse(res.body).data);
-        var beerData = JSON.parse(res.body).data;
+        // console.log('data: ', JSON.parse(res.body).data);
+        var beerData = JSON.parse(response.body).data;
         var beerObj = {
             beerInfo: beerData
         }
-        console.log('userId: ', req.params.userId);
+        // console.log('userId: ', req.params.userId);
         Beer.create(beerObj, (err, beer) => {
             if (err) return res.send(err);
-            console.log('cannot create');
-            console.log('beer: ', beer);
+            // console.log('beer: ', beer);
 
             beer.user.push(userId);
             beer.save();
-            console.log('beer._id: ', beer._id);
+            // console.log('beer._id: ', beer._id);
             if(beer._id){
                 User.findById(userId, (err, user) => {
                     if (err || !user) return res.status(400).send(err || 'no user found');
-                    console.log('user: ', user);
+                    // console.log('user: ', user);
                     user.allbeer.push(beer._id);
                     user.save();
                     res.send(beer);
