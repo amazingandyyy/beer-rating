@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var User = require('../models/user');
-var Post = require('../models/post');
+var Beer = require('../models/beer');
 var moment = require('moment');
 
 router.get('/', (req, res) => {
@@ -10,9 +10,9 @@ router.get('/', (req, res) => {
         res.status(err ? 400 : 200).send(err || users);
     });
 });
-router.get('/posts', (req, res) => {
-    Post.find({}, (err, posts) => {
-        res.status(err ? 400 : 200).send(err || posts);
+router.get('/beers', (req, res) => {
+    beer.find({}, (err, beers) => {
+        res.status(err ? 400 : 200).send(err || beers);
     }).populate('user');
 });
 
@@ -23,33 +23,33 @@ router.post('/register', (req, res) => {
         res.status(err ? 400 : 200).send(err);
     });
 });
-router.post('/:id/post', (req, res) => {
+router.post('/:id/beer', (req, res) => {
     var userId = req.params.id;
-    var postObj = req.body;
-    // console.log('postObj: ', req.body);
+    var beerObj = req.body;
+    // console.log('beerObj: ', req.body);
     // console.log('user: ', req.params);
     var deadline = moment();
-    var deadlineM = deadline.valueOf(postObj.deadline);
+    var deadlineM = deadline.valueOf(beerObj.deadline);
     console.log('deadlineM: ', deadlineM);
-    var postDetails = {
+    var beerDetails = {
         user: userId,
-        name: postObj.name,
-        description: postObj.description,
-        image: postObj.image,
-        price: postObj.price,
+        name: beerObj.name,
+        description: beerObj.description,
+        image: beerObj.image,
+        price: beerObj.price,
         deadline: deadlineM
     }
-    console.log('postDetails: ', postDetails);
-    Post.post(postDetails, (err, postDetails)  => {
-        res.status(err ? 400 : 200).send(err || postDetails);
+    console.log('beerDetails: ', beerDetails);
+    beer.beer(beerDetails, (err, beerDetails)  => {
+        res.status(err ? 400 : 200).send(err || beerDetails);
     });
 });
-router.put('/:userId/like/:postId', (req, res) => {
+router.put('/:userId/like/:beerId', (req, res) => {
     var userId = req.params.userId;
-    var postId = req.params.postId;
+    var beerId = req.params.beerId;
     console.log('userId: ', userId);
-    console.log('postId: ', postId);
-    Post.liked(userId, postId, err => {
+    console.log('beerId: ', beerId);
+    beer.liked(userId, beerId, err => {
         res.status(err ? 400 : 200).send(err);
     });
 });

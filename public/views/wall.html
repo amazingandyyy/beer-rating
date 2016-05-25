@@ -1,0 +1,41 @@
+<h1>Explore</h1>
+<hr>
+<!-- <div class="col-sm-12">
+      <input type="text" class="form-control" placeholder="Serch people by name, email, or location..." ng-model="searchFilter">
+      <br>
+  </div> -->
+<!-- <div class="col-sm-10">
+    <form ng-submit="postSubmit()">
+        <input type="text" class="form-control" placeholder="Item name" ng-model="post.name">
+        <br>
+        <input type="text" class="form-control" placeholder="Item description" ng-model="post.description">
+        <br>
+        <input type="text" class="form-control" placeholder="Item image" ng-model="post.image">
+        <br>
+        <input type="number" class="form-control" placeholder="starting price" ng-model="post.price">
+        <br>
+        <input type="datetime-local" min="2016-05-14" class="form-control" placeholder="Deadline" ng-model="post.deadline">
+        <br>
+        <button type="submit" class="btn btn-primary btn-xs">
+            Post it to market
+        </button>
+    </form>
+    <br>
+</div> -->
+<!-- <h4>{{(users | filter: searchFilter).length}} users found</h4> -->
+<div class="colr-sm-12 text-center">
+    <button type="button" class="btn btn-primary btn-lg" ng-click="getRandomBeer()">Pick One</button>
+</div>
+<div class="colr-sm-3"></div>
+<div ng-show="beer" class="col-sm-6 col-md-3">
+    <div class="card" style="cursor: pointer;">
+        <div class="card-block">
+            <h3>{{beer.name}}</h3>
+            <p >{{beer.description}}</p>
+            <a ng-click="rate = true" class="btn btn-success">Sampled</a>
+            <input ng-show="rate" type="text">
+            <a ng-hide="rate"class="btn btn-default">Not Sampled</a>
+        </div>
+    </div>
+</div>
+<div class="colr-sm-3"></div>
